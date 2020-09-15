@@ -47,4 +47,13 @@ function disconnect(session::Ptr{SFTPSession})
     ccall((:sftp_free, lib2), Cvoid, (Ptr{SFTPSession},), session)
 end
 
+function sftp_session(func::Function, ssh_session)
+    _sftp_session = sftp_session(ssh_session)
+    try
+        func(_sftp_session)
+    finally
+        disconnect(_sftp_session)
+    end
+end
+
 end # module
