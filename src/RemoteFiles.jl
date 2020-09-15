@@ -1,7 +1,7 @@
 module RemoteFiles
 
 const lib = "/usr/local/lib/libssh.dylib"
-const lib2 = "src/remote_files.dylib"
+const lib2 = "deps/remote_files.dylib"
 
 mutable struct SSHSession
 end
