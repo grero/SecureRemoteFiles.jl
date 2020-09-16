@@ -85,6 +85,11 @@ end
 
 function sftp_read(file::Ptr{SFTPFile},nbytes::Int64)
     buffer = fill(zero(UInt8), nbytes)
+    sftp_read(file, buffer)
+end
+
+function sftp_read(file::Ptr{SFTPFile}, buffer::Vector{UInt8})
+    nbytes = length(buffer)
     bytes_read = ccall((:sftp_read, lib), Cint, (Ptr{SFTPFile}, Ref{UInt8}, Cint), file, buffer, nbytes)
     if bytes_read == 0
         return UInt8[]
