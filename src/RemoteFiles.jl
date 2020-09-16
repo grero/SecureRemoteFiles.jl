@@ -12,7 +12,7 @@ end
 mutable struct SFTPFile
 end
 
-function ssh_session(hostname::String, port::Int64=22) 
+function ssh_session(hostname::String, port::Int64=22)
     session = ccall((:connect_to_host, lib2), Ptr{SSHSession}, (Cstring, Cint), hostname, port)
     if session == C_NULL
         error("Could not connect to host")
