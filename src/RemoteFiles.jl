@@ -104,4 +104,7 @@ function sftp_seek(file::Ptr{SFTPFile}, pos::Int64)
     end
 end
 
+Base.seek(file::Ptr{SFTPFile}, pos) = sftp_seek(file, pos)
+Base.read!(file::Ptr{SFTPFile}, data::Vector{UInt8}) = sftp_read(file, data)
+
 end # module
