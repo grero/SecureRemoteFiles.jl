@@ -9,7 +9,7 @@ end
 mutable struct SFTPSession
 end
 
-mutable struct SFTPFile
+mutable struct SFTPFile <: IO
 end
 
 function ssh_session(hostname::String, port::Int64=22)
