@@ -89,10 +89,14 @@ function sftp_read(file::Ptr{SFTPFile},nbytes::Int64)
     if bytes_read == 0
         return UInt8[]
     end
-    if bytes_read < nbytes
-        error("Error reading file")
+    return buffer[1:bytes_read]
+end
+
+function sftp_seek(file::Ptr{SFTPFile}, pos::Int64)
+    rc = ccall((:sftp_seek, lib), Cint, (Ptr{SFTPFile}, Cint), file, pos)
+    if rc != 0
+        error("Failed to seek to desired position")
     end
-    return buffer
 end
 
 end # module
