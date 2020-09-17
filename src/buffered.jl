@@ -96,7 +96,7 @@ function Base.read(io::BufferedSFTPReader, ::Type{T}, n::Int) where T
     buffer = io.buffer
     n = sizeof(T) * n
     if length(buffer) - position < n
-        readmore!(io, sizeof(T))
+        readmore!(io, n)
     end
     io.position[] = position + n
     arr = Vector{T}(undef, n)
