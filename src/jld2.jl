@@ -1,5 +1,7 @@
 using JLD2
-using JLD2: verify_file_header, load_group
+using JLD2: verify_file_header, load_group, JLDFile
+
+JLD2.read_bytestring(io::SFTPFile) = String(readuntil(io, 0x0))
 
 function JLD2.openfile(::Type{SFTPFile}, session::Ptr{SFTPSession}, fname, wr, create, truncate, fallback::Nothing=nothing)
     access = 0
