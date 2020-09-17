@@ -131,6 +131,17 @@ end
 Base.seek(file::SFTPFile, pos) = sftp_seek(file.handle, UInt64(pos))
 Base.read!(file::SFTPFile, data::Vector{UInt8}) = sftp_read(file.handle, data)
 Base.read(file::SFTPFile, ::Type{UInt8}) = (c = sftp_read(file.handle, 1); length(c) == 1 ? first(c) : nothing)
+
+function Base.unsafe_read(file::SFTPFile, p::Ptr{UInt8}, nbytes::UInt)
+    handle = file.handle
+    bytes_read = ccall((:sftp_read, lib), Cssize_t, (Ptr{SFTPFileHandle}, Ptr{UInt8}, Csize_t), handle, p, nbytes)
+    if bytes_read < nbytes
+        @show nbytes, bytes_read
+        error("Could not read from file")
+    end
+    nothing
+end
+
 Base.close(file::SFTPFile) = (file._isopen && sftp_close(file.handle);file._isopen = false)
 Base.isopen(file::SFTPFile) = file._isopen
 
