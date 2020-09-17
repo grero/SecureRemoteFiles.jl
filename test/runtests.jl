@@ -33,13 +33,12 @@ end
     ssh_session = RemoteFiles.ssh_session("localhost",22)
     sftp_session = RemoteFiles.sftp_session(ssh_session)
     try
-        jfile = JLD2.jldopen(joinpath(tdir, "test.jl2"), false, false, false, RemoteFiles.SFTPFile, sftp_session, nothing, false, false)
-        @test jfile["a"] == 1
-        @test jfile["b"] == [1,2,3]
-        @test jfile["c"] == "hello"
-        @show jfile.written, jfile.n_times_opened
-        # need to close everything now before the session closes
-        JLD2.jld_finalizer(jfile)
+        JLD2.jldopen(joinpath(tdir, "test.jl2"), false, false, false, RemoteFiles.SFTPFile, sftp_session, nothing, false, false) do jfile
+            @test jfile["a"] == 1
+            @test jfile["b"] == [1,2,3]
+            @test jfile["c"] == "hello"
+            # need to close everything now before the session closes
+        end
     finally
         RemoteFiles.disconnect(sftp_session)
         RemoteFiles.disconnect(ssh_session)
