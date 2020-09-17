@@ -9,9 +9,13 @@ using JLD2
     fsize, data = RemoteFiles.ssh_session("localhost", 22) do session
         RemoteFiles.sftp_session(session) do sftp_session
             RemoteFiles.sftp_open(sftp_session, "/tmp/testfile.txt", 0) do file
+                ff = RemoteFiles.SFTPFile(file, true)
+                bytes = Vector{UInt8}(undef, 14)
+                unsafe_read(ff, pointer(bytes), 14)
+                @test bytes == UInt8[0x54, 0x68, 0x69, 0x73, 0x20, 0x69, 0x73, 0x20, 0x61, 0x20, 0x74, 0x65, 0x73, 0x74]
+            end
+            RemoteFiles.sftp_open(sftp_session, "/tmp/testfile.txt", 0) do file
                 fsize = RemoteFiles.sftp_filesize(file)
-            #    fname = RemoteFiles.sftp_filename(file)
-            #    @show fname
                 bytes = RemoteFiles.sftp_read(file, 100)
                 fsize, bytes 
             end
