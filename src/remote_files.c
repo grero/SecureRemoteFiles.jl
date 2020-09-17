@@ -95,7 +95,7 @@ int authenticate_pubkey(ssh_session session)
 
 ssh_session connect_to_host(char *hostname, int port)
 {
-    int verbosity = SSH_LOG_PROTOCOL;
+    int verbosity = SSH_LOG_WARNING;
     int rc;
 
     ssh_session my_ssh_session = ssh_new();
