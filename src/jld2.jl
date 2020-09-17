@@ -23,11 +23,23 @@ function JLD2.jldopen(fname::AbstractString, wr::Bool, create::Bool, truncate::B
         verify_file_header(f)
         seek(io, JLD2.FILE_HEADER_LENGTH)
         superblock = read(io, JLD2.Superblock)
-    f.end_of_data = superblock.end_of_file_address
-    f.root_group_offset = superblock.root_group_object_header_address
-    f.root_group = load_group(f, superblock.root_group_object_header_address)
-    f
+        f.end_of_data = superblock.end_of_file_address
+        f.root_group_offset = superblock.root_group_object_header_address
+        f.root_group = load_group(f, superblock.root_group_object_header_address)
+        if haskey(f.root_group.written_links, "_types")
+            types_group_offset = f.root_group.written_links["_types"]
+            f.types_group = f.loaded_groups[types_group_offset] = load_group(f, types_group_offset)
+            i = 0
+            for offset in values(f.types_group.written_links)
+                f.datatype_locations[offset] = CommittedDatatype(offset, i += 1)
+            end
+            resize!(f.datatypes, length(f.datatype_locations))
+        else
+            f.types_group = JLD2.Group{typeof(f)}(f)
+        end
     end
+    @show f.root_group.written_links
+    f
 end
 
 
