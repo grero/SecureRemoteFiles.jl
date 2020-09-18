@@ -38,7 +38,6 @@ function JLD2.jldopen(fname::AbstractString, wr::Bool, create::Bool, truncate::B
             f.types_group = JLD2.Group{typeof(f)}(f)
         end
     end
-    @show f.root_group.written_links
     f
 end
 
