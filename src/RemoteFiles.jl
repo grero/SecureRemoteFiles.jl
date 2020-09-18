@@ -170,7 +170,7 @@ Base.isopen(file::SFTPFile) = file._isopen
 
 # this is a hack
 function Base.eof(file::SFTPFile)
-    buffer = Vector{UInt8}(undef, 1) 
+    buffer = Vector{UInt8}(undef, 1)
     n = sftp_read(file.handle, buffer)
     if n == 0
         return true
@@ -207,7 +207,7 @@ function Base.stat(io::SFTPFile)
     fstat = sftp_fstat(io.handle)
     bufptr = convert(Ptr{UInt8}, _fstat)
     bytes = Vector{UInt8}(undef, 8)
-    for i in 1:length(bytes) 
+    for i in 1:length(bytes)
         bytes[i] = unsafe_load(bufptr, 24+i)
     end
     fsize = first(reinterpret(UInt64, bytes))
@@ -217,7 +217,7 @@ function sftp_filesize(file::Ptr{SFTPFileHandle})
     _fstat = sftp_fstat(file)
     bufptr = convert(Ptr{UInt8}, _fstat)
     bytes = Vector{UInt8}(undef, 8)
-    for i in 1:length(bytes) 
+    for i in 1:length(bytes)
         bytes[i] = unsafe_load(bufptr, 24+i)
     end
     fsize = reinterpret(UInt64, bytes)
