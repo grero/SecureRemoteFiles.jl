@@ -1,5 +1,6 @@
 module RemoteFiles
 using JLD2
+using ProgressMeter
 
 const lib = "/usr/local/lib/libssh.dylib"
 const lib2 = "deps/remote_files.dylib"
@@ -135,11 +136,31 @@ Base.read!(file::SFTPFile, data::Vector{UInt8}) = sftp_read(file.handle, data)
 Base.read(file::SFTPFile, ::Type{UInt8}) = (c = sftp_read(file.handle, 1); length(c) == 1 ? first(c) : nothing)
 
 function Base.unsafe_read(file::SFTPFile, p::Ptr{UInt8}, nbytes::UInt)
+    #TODO: handle chunks here
     handle = file.handle
-    bytes_read = ccall((:sftp_read, lib), Cssize_t, (Ptr{SFTPFileHandle}, Ptr{UInt8}, Csize_t), handle, p, nbytes)
-    if bytes_read < nbytes
-        @show nbytes, bytes_read
-        error("Could not read from file")
+    to_read = nbytes
+    offset = 0
+    prog = Progress(nbytes, 1.0)
+    while true
+        nb = min(to_read, XFER_BUF_SIZE)
+        t0 = time()
+        bytes_read = ccall((:sftp_read, lib), Cssize_t, (Ptr{SFTPFileHandle},
+                                         Ptr{UInt8}, Csize_t), handle, p+offset, nb)
+        t1 = time()
+        rate = (bytes_read/MB)/(t1-t0)
+        t0 = t1
+        rates = "$(round(rate, digits=1)) MB/s"
+        if bytes_read < nb
+            error("Could not read from file")
+        end
+        to_read = max(0, to_read - nb)
+        to_reads = "$(round(to_read/MB, digits=1)) MB"
+        offset += bytes_read
+        update!(prog, offset;showvalues=[(:Remaining, to_reads),
+                                         (:Rate, rates)])
+        if to_read == 0
+            break
+        end
     end
     nothing
 end
