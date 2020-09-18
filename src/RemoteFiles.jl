@@ -3,6 +3,8 @@ using JLD2
 
 const lib = "/usr/local/lib/libssh.dylib"
 const lib2 = "deps/remote_files.dylib"
+const XFER_BUF_SIZE = 32767
+const MB = 1048576
 
 mutable struct SSHSession
 end
