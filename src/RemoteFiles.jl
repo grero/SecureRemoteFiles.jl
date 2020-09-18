@@ -7,6 +7,8 @@ const lib2 = "deps/remote_files.dylib"
 const XFER_BUF_SIZE = 32767
 const MB = 1048576
 
+@enum SSHLogLevel nolog=0 warning=1 protocol=2 packet=3 functions=4
+
 mutable struct SSHSession
 end
 
@@ -34,8 +36,8 @@ function ssh_version()
     return vstring
 end
 
-function ssh_session(hostname::String, port::Int64=22)
-    session = ccall((:connect_to_host, lib2), Ptr{SSHSession}, (Cstring, Cint), hostname, port)
+function ssh_session(hostname::String, port::Int64=22, verbosity::SSHLogLevel=nolog)
+    session = ccall((:connect_to_host, lib2), Ptr{SSHSession}, (Cstring, Cint, Cint), hostname, port, verbosity)
     if session == C_NULL
         error("Could not connect to host")
     end
