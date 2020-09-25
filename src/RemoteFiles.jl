@@ -4,7 +4,7 @@ using ProgressMeter
 
 if get(ENV, "TRAVIS", false)
     const lib = "/usr/lib/x86_64-linux-gnu/libssh.dylib"
-else if Sys.isapple() || Sys.isunix()
+elseif Sys.isapple() || Sys.isunix()
     const lib = "/usr/local/lib/libssh.dylib"
 end
 
@@ -29,6 +29,38 @@ end
 mutable struct SFTPFile <: IO
     handle::Ptr{SFTPFileHandle}
     _isopen::Bool
+end
+
+struct SFTPPath
+    hostname::String
+    username::String
+    port::Int64
+    path::String
+end
+
+function SFTPPath(ss::String)
+    pattern = r"([[:alnum:]]+@)*([[:alnum:]]*)\:*([0-9]*)\:([[:alnum:][:punct:]]*)"
+    m = match(pattern, ss)
+    if m == nothing
+        error("$ss is not a valid sftp path")
+    end
+    if m.captures[1] != nothing
+        username = rstrip(m.captures[1], '@')
+    else
+        username = ""
+    end
+    hostname = m.captures[2]
+    if !isempty(m.captures[3])
+        port = parse(Int64, m.captures[3])
+    else
+        port = 22
+    end
+    path = m.captures[4]
+    SFTPPath(hostname, username, port, path)
+end
+
+macro sftp_str(p)
+    SFTPPath(p)
 end
 
 include("dataio.jl")
@@ -65,7 +97,9 @@ end
 function sftp_session(ssh_session::Ptr{SSHSession})
     session = ccall((:sftp_new, lib2), Ptr{SFTPSession}, (Ptr{SSHSession},), ssh_session)
     if session == C_NULL
-        error("Could not create SFTP session")
+        err = ccall((:ssh_get_error, lib), Ptr{UInt8}, (Ptr{SSHSession},), ssh_session)
+        errmsg = unsafe_string(err)
+        error("Could not create SFTP session. $(errmsg)")
     end
     rc = ccall((:sftp_init, lib2), Cint, (Ptr{SFTPSession},), session)
     if rc != 0
@@ -91,7 +125,23 @@ end
 function sftp_open(session::Ptr{SFTPSession}, fname::String, access_type::Int64)
     file = ccall((:sftp_open, lib2),Ptr{SFTPFileHandle}, (Ptr{SFTPSession}, Cstring, Cint), session, fname, access_type)
     if file == C_NULL
-        error("Could not open remote file $fname")
+        errcode = ccall((:sftp_get_error, lib), Cint, (Ptr{SFTPSession},), session)
+        if errcode == 2
+            # No such file, check if we are dealing with a symbolic link
+            pathptr = ccall((:sftp_readlink, lib), Ptr{UInt8}, (Ptr{SFTPSession},Cstring),session, fname)
+            if pathptr == C_NULL
+                errcode = ccall((:sftp_get_error, lib), Cint, (Ptr{SFTPSession},), session)
+                error("Could not open remote link $fname. Error was $errcode.")
+            end
+            _fname = unsafe_string(pathptr)
+            if !isabspath(_fname)
+                # relatove to filename
+                _fname = joinpath(dirname(fname), _fname)
+            end
+            sftp_open(session, _fname, access_type)
+        else
+            error("Could not open remote file $fname. Error was $errcode.")
+        end
     end
     return file
 end
