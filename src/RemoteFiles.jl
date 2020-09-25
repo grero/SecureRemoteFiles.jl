@@ -2,7 +2,9 @@ module RemoteFiles
 using JLD2
 using ProgressMeter
 
-if Sys.isapple() || Sys.isunix()
+if get(ENV, "TRAVIS", false)
+    const lib = "/usr/lib/x86_64-linux-gnu/libssh.dylib"
+else if Sys.isapple() || Sys.isunix()
     const lib = "/usr/local/lib/libssh.dylib"
 end
 
