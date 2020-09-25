@@ -14,8 +14,7 @@ git:
 ## uncomment the following lines to allow failures on nightly julia
 ## (tests will run but not make your overall status red)
 env:
-  - LD_LIBRARY_PATH=/usr/lib/x86-64-linux-gnu
-  - C_INCLUDE_PATH=/usr/include
+  - LD_LIBRARY_PATH=/usr/lib/x86-64-linux-gnu C_INCLUDE_PATH=/usr/include
 
 matrix:
   allow_failures:
