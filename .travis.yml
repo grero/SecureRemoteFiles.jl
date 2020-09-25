@@ -32,7 +32,7 @@ before_script:
   - sudo apt-get -y install libssh-dev
   - echo `dpkg -L libssh-dev`
   - julia -e 'using Pkg; @show ENV; Pkg.build()'
-  - ln -sf /usr/lib/x86_64-linux-gnu/libssh.so /usr/local/lib/libssh.so
+  - sudo ln -sf /usr/lib/x86_64-linux-gnu/libssh.so /usr/local/lib/libssh.so
   - ssh-keyscan -t ecdsa localhost >> ~/.ssh/known_hosts
 #script:
 after_success:
