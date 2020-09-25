@@ -30,6 +30,7 @@ before_script:
 ## uncomment the following lines to override the default test script
   - echo `dpkg -L libssh-dev`
   - julia -e 'using Pkg; @show ENV; Pkg.build()'
+  - nm -D deps/remote_files.dylib 
 #script:
 after_success:
   # push coverage results to Coveralls
