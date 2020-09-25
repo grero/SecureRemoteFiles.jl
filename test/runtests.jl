@@ -1,3 +1,6 @@
+using Libdl
+push!(Libdl.DL_LOAD_PATH, joinpath(@__DIR__, "..", "deps"))
+
 using RemoteFiles
 using Test
 using JLD2
