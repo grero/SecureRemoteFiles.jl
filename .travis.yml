@@ -25,8 +25,8 @@ matrix:
 addons:
   apt: # apt-get for linux
     packages:
-    - libssh-dev 
-before_script: 
+    - libssh-dev
+before_script:
 ## uncomment the following lines to override the default test script
   - echo `dpkg -L libssh-dev`
   - julia -e 'using Pkg; @show ENV; Pkg.build()'
