@@ -3,7 +3,7 @@ using JLD2
 using ProgressMeter
 
 const lib = "/usr/local/lib/libssh.dylib"
-const lib2 = "deps/remote_files.dylib"
+const lib2 = "remote_files.dylib"
 const XFER_BUF_SIZE = 32767
 const MB = 1048576
 
