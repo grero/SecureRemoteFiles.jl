@@ -22,11 +22,14 @@ matrix:
 
 ## uncomment and modify the following lines to manually install system packages
 addons:
-  apt: # apt-get for linux
-    packages:
-    - libssh-dev
+  #apt: # apt-get for linux
+  #  packages:
+  #  - libssh-dev
 before_script:
 ## uncomment the following lines to override the default test script
+  - sudo add-apt-repository ppa:kedazo/libssh-0.7.x
+  - sudo apt-get -q update
+  - sudo apt-get install libssh-dev
   - echo `dpkg -L libssh-dev`
   - julia -e 'using Pkg; @show ENV; Pkg.build()'
   - nm -D /usr/lib/x86_64-linux-gnu/libssh.so
