@@ -17,7 +17,7 @@ using JLD2
             RemoteFiles.sftp_open(sftp_session, "/tmp/testfile.txt", 0) do file
                 fsize = RemoteFiles.sftp_filesize(file)
                 bytes = RemoteFiles.sftp_read(file, 100)
-                fsize, bytes 
+                fsize, bytes
             end
         end
     end
