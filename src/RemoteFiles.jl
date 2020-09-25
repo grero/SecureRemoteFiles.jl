@@ -3,7 +3,7 @@ using JLD2
 using ProgressMeter
 
 if "TRAVIS" in keys(ENV)
-    const lib = "/usr/lib/x86_64-linux-gnu/libssh.dylib"
+    const lib = "/usr/lib/x86_64-linux-gnu/libssh.so"
 elseif Sys.isapple() || Sys.isunix()
     const lib = "/usr/local/lib/libssh.dylib"
 end
