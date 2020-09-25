@@ -47,8 +47,8 @@ function ssh_session(hostname::String, port::Int64=22, verbosity::SSHLogLevel=no
     return session
 end
 
-function ssh_session(func::Function, hostname::String, port::Int64)
-    session = ssh_session(hostname, port)
+function ssh_session(func::Function, hostname::String, port::Int64, verbosity::SSHLogLevel=nolog)
+    session = ssh_session(hostname, port, verbosity)
     try
         func(session)
     finally
