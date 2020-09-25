@@ -25,7 +25,7 @@ addons:
 before_script: 
 ## uncomment the following lines to override the default test script
   - echo `dpkg -L libssh-dev` 
-  - epxort LD_LIBRARY_PATH=$(LD_LIBRARY_PATH):/usr/lib/x86-64-linux-gnu && julia -e 'using Pkg; Pkg.build()'
+  - epxort LD_LIBRARY_PATH=/usr/lib/x86-64-linux-gnu && julia -e 'using Pkg; Pkg.build()'
 #script:
 after_success:
   # push coverage results to Coveralls
