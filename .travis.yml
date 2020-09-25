@@ -24,7 +24,7 @@ addons:
     - libssh-dev 
 before_script: 
 ## uncomment the following lines to override the default test script
-  - dpkg -L libssh-dev 
+  - echo `dpkg -L libssh-dev` 
   - julia -e 'using Pkg; Pkg.build()'
 #script:
 after_success:
