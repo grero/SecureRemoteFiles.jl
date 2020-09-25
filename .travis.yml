@@ -13,6 +13,10 @@ git:
 
 ## uncomment the following lines to allow failures on nightly julia
 ## (tests will run but not make your overall status red)
+env:
+  - LD_LIBRARY_PATH=/usr/lib/x86-64-linux-gnu
+  - C_INCLUDE_PATH=/usr/include
+
 matrix:
   allow_failures:
   - julia: nightly
@@ -24,8 +28,8 @@ addons:
     - libssh-dev 
 before_script: 
 ## uncomment the following lines to override the default test script
-  - echo `dpkg -L libssh-dev` 
-  - export LD_LIBRARY_PATH=/usr/lib/x86-64-linux-gnu && export C_INCLUDE_PATH=/usr/include && julia -e 'using Pkg; @show ENV; Pkg.build()'
+  - echo `dpkg -L libssh-dev`
+  - julia -e 'using Pkg; @show ENV; Pkg.build()'
 #script:
 after_success:
   # push coverage results to Coveralls
