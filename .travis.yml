@@ -19,7 +19,7 @@ matrix:
 
 ## uncomment and modify the following lines to manually install system packages
 addons:
-#  apt: # apt-get for linux
+  apt: # apt-get for linux
     packages:
     - libssh-dev 
 before_script: 
