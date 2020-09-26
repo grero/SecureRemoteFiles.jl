@@ -6,7 +6,7 @@ using JLD2
     open("/tmp/testfile.txt","w") do f
         write(f, "This is a test")
     end
-    fsize, data = RemoteFiles.ssh_session("localhost", 22) do session
+    fsize, data = RemoteFiles.ssh_session("localhost", 22, RemoteFiles.functions) do session
         RemoteFiles.sftp_session(session) do sftp_session
             RemoteFiles.sftp_open(sftp_session, "/tmp/testfile.txt", 0) do file
                 ff = RemoteFiles.SFTPFile(file, true)
