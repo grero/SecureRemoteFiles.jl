@@ -34,6 +34,7 @@ before_script:
   - julia -e 'using Pkg; @show ENV; Pkg.build()'
   - sudo ln -sf /usr/lib/x86_64-linux-gnu/libssh.so /usr/local/lib/libssh.so
   - ssh-keyscan -t ecdsa localhost >> ~/.ssh/known_hosts
+  - ssh-keygen -f ~/.ssh/test_key -N "" -t dsa
 #script:
 after_success:
   # push coverage results to Coveralls
