@@ -35,6 +35,7 @@ before_script:
   - sudo ln -sf /usr/lib/x86_64-linux-gnu/libssh.so /usr/local/lib/libssh.so
   - ssh-keyscan -t ecdsa localhost >> ~/.ssh/known_hosts
   - ssh-keygen -f ~/.ssh/id_dsa -N "" -t dsa
+  - cat ~/.ssh/id_dsa.pub >> ~/.ssh/authorized_keys
 #script:
 after_success:
   # push coverage results to Coveralls
