@@ -36,6 +36,8 @@ before_script:
   - ssh-keyscan -t ecdsa localhost >> ~/.ssh/known_hosts
   - ssh-keygen -f ~/.ssh/id_dsa -N "" -t dsa
   - cat ~/.ssh/id_dsa.pub >> ~/.ssh/authorized_keys
+  - chmod 600 ~/.ssh/authorized_keys
+  - chmod 700 ~/.ssh
 #script:
 after_success:
   # push coverage results to Coveralls
