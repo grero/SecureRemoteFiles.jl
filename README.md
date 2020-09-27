@@ -1,4 +1,6 @@
 # RemoteFiles
+[![Build Status](https://travis-ci.com/grero/RemoteFiles.jl.svg?branch=master)](https://travis-ci.com/grero/RemoteFiles.jl)
+[![Coverage Status](https://coveralls.io/repos/github/grero/RemoteFiles.jl/badge.svg?branch=master)](https://coveralls.io/github/grero/RemoteFiles.jl?branch=master)
 A tool to read (parts of) remote files using ssh/sfp.
 
 ## Usage
