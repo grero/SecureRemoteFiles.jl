@@ -2,6 +2,27 @@ using RemoteFiles
 using Test
 using JLD2
 
+
+@testset "Server" begin
+    sftp_path = RemoteFiles.sftp"grero@WorkingMemoryData:6494:/volume1/NewWorkingMemoryData"
+    @test sftp_path.username == "grero"
+    @test sftp_path.hostname == "WorkingMemoryData"
+    @test sftp_path.port == 6494
+    @test sftp_path.path == "/volume1/NewWorkingMemoryData"
+
+    sftp_path = RemoteFiles.sftp"grero@WorkingMemoryData:/volume1/NewWorkingMemoryData"
+    @test sftp_path.username == "grero"
+    @test sftp_path.hostname == "WorkingMemoryData"
+    @test sftp_path.port == 22
+    @test sftp_path.path == "/volume1/NewWorkingMemoryData"
+
+    sftp_path = RemoteFiles.sftp"WorkingMemoryData:/volume1/NewWorkingMemoryData"
+    @test sftp_path.username == ""
+    @test sftp_path.hostname == "WorkingMemoryData"
+    @test sftp_path.port == 22
+    @test sftp_path.path == "/volume1/NewWorkingMemoryData"
+end
+
 @testset "session" begin
     open("/tmp/testfile.txt","w") do f
         write(f, "This is a test")
