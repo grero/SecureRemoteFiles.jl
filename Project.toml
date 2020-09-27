@@ -1,7 +1,15 @@
 name = "RemoteFiles"
 uuid = "2d6cd7d8-658f-463b-ac21-7e43b9cfdb45"
 authors = ["roger <roger.herikstad@gmail.com>"]
-version = "0.1.0"
+version = "0.2.0"
 
 [deps]
+JLD2 = "033835bb-8acc-5ee8-8aae-3f567f8a3819"
+ProgressMeter = "92933f4c-e287-5a05-a399-4b506db050ca"
+
+[extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+Libdl = "8f399da3-3557-5675-b5ff-fb832c97cbdb"
+
+[targets]
+test = ["Test","Libdl"]

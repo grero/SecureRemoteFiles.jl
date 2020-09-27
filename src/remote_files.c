@@ -93,9 +93,8 @@ int authenticate_pubkey(ssh_session session)
   return rc;
 }
 
-ssh_session connect_to_host(char *hostname, int port)
+ssh_session connect_to_host(char *hostname, int port, int verbosity)
 {
-    int verbosity = SSH_LOG_PROTOCOL;
     int rc;
 
     ssh_session my_ssh_session = ssh_new();
