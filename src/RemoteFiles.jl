@@ -211,6 +211,7 @@ end
 Base.seek(file::SFTPFile, pos) = sftp_seek(file.handle, UInt64(pos))
 Base.read!(file::SFTPFile, data::Vector{UInt8}) = sftp_read(file.handle, data)
 Base.read(file::SFTPFile, ::Type{UInt8}) = (c = sftp_read(file.handle, 1); length(c) == 1 ? first(c) : nothing)
+Base.read(file::SFTPFile, nbytes::Int64) = (data = Vector{UInt8}(undef, nbytes); read!(file, data); data)
 
 function Base.unsafe_read(file::SFTPFile, p::Ptr{UInt8}, nbytes::UInt)
     #TODO: handle chunks here
