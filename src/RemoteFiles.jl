@@ -68,6 +68,8 @@ include("dataio.jl")
 include("buffered.jl")
 include("jld2.jl")
 
+export @sftp_str
+
 function ssh_version()
     _version = ccall((:ssh_version, lib), Ptr{UInt8}, (Cint,), 0)
     vstring = unsafe_string(_version)
