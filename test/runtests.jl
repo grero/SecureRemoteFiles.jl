@@ -48,7 +48,7 @@ end
     data2 = read(ff, 14)
     @test data2 == data
     close(ff)
-    data3 = open(sftp"localhost:/tmp/testfile.txt") do ff
+    data3 = open(sftp"localhost:/tmp/testfile.txt",0) do ff
         read(ff, 14)
     end
     @test data3 == data
