@@ -1,6 +1,7 @@
 module RemoteFiles
 using JLD2
 using ProgressMeter
+using Base: open
 
 if "TRAVIS" in keys(ENV)
     const lib = "/usr/lib/x86_64-linux-gnu/libssh.so"
@@ -155,11 +156,30 @@ end
 
 function sftp_open(func::Function, sftp_session::Ptr{SFTPSession}, fname, access)
     file = sftp_open(sftp_session, fname, access)
+    a = nothing
     try
-        func(file)
+        a = func(file)
     finally
         sftp_close(file)
     end
+    a
+end
+
+function Base.open(func::Function, path::SFTPPath, perm, args...;kvs...)
+    ssh_session(path.hostname, path.port) do session
+        sftp_session(session) do _sftpsession
+            sftp_open(_sftpsession, path.path, perm) do ff
+                func(SFTPFile(ff, true), args...; kvs...)
+            end
+        end
+    end
+end
+
+function Base.open(path::SFTPPath, perm=0)
+    _session = ssh_session(path.hostname, path.port)
+    _sftp_session = sftp_session(_session)
+     ff = sftp_open(_sftp_session, path.path, perm)
+     SFTPFile(ff, true)
 end
 
 function sftp_read(file::Ptr{SFTPFileHandle},nbytes::Int64)
