@@ -1,4 +1,4 @@
-module RemoteFiles
+module SecureRemoteFiles
 using JLD2
 using ProgressMeter
 using Base: open
