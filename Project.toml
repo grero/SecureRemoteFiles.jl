@@ -1,5 +1,5 @@
-name = "RemoteFiles"
-uuid = "2d6cd7d8-658f-463b-ac21-7e43b9cfdb45"
+name = "SecureRemoteFiles"
+uuid = "116ef8fe-5c41-4422-b876-65cc9190e899"
 authors = ["roger <roger.herikstad@gmail.com>"]
 version = "0.3.0"
 
