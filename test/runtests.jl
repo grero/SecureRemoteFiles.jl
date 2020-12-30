@@ -45,6 +45,7 @@ end
     @test data == UInt8[0x54, 0x68, 0x69, 0x73, 0x20, 0x69, 0x73, 0x20, 0x61, 0x20, 0x74, 0x65, 0x73, 0x74]
     @test fsize == 0x000000000000000e
     ff = open(sftp"localhost:/tmp/testfile.txt")
+    @test filesize(sftp"localhost:/tmp/testfile.txt") == fsize
     data2 = read(ff, 14)
     @test data2 == data
     close(ff)
