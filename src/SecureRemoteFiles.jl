@@ -316,6 +316,12 @@ function Base.filesize(io::SFTPFile)
     sftp_filesize(io.handle)
 end
 
+function Base.filesize(fname::SFTPPath)
+    open(fname,0) do ff
+        filesize(ff)
+    end
+end
+
 function Base.position(io::SFTPFile)
     sftp_tell(io.handle)
 end
