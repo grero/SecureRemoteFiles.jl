@@ -1,7 +1,7 @@
 name = "SecureRemoteFiles"
 uuid = "116ef8fe-5c41-4422-b876-65cc9190e899"
 authors = ["roger <roger.herikstad@gmail.com>"]
-version = "0.3.0"
+version = "0.4.0"
 
 [deps]
 JLD2 = "033835bb-8acc-5ee8-8aae-3f567f8a3819"
