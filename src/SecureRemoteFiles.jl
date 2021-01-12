@@ -215,13 +215,13 @@ Base.read!(file::SFTPFile, data::Vector{UInt8}) = sftp_read(file.handle, data)
 Base.read(file::SFTPFile, ::Type{UInt8}) = (c = sftp_read(file.handle, 1); length(c) == 1 ? first(c) : nothing)
 Base.read(file::SFTPFile, nbytes::Int64) = (data = Vector{UInt8}(undef, nbytes); read!(file, data); data)
 
-function Base.unsafe_read(file::SFTPFile, p::Ptr{UInt8}, nbytes::UInt)
+function Base.unsafe_read(file::SFTPFile, p::Ptr{UInt8}, nbytes::UInt;bufsize=XFER_BUF_SIZE)
     #TODO: handle chunks here
     handle = file.handle
     to_read = nbytes
     offset = 0
     while true
-        nb = min(to_read, XFER_BUF_SIZE)
+        nb = min(to_read, bufsize)
         bytes_read = ccall((:sftp_read, lib), Cssize_t, (Ptr{SFTPFileHandle},
                                          Ptr{UInt8}, Csize_t), handle, p+offset, nb)
         if bytes_read < nb
